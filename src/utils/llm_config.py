@@ -80,8 +80,6 @@ class LLMConfig(BaseModel):
         """Get a Pydantic AI agent based on configuration"""
         from pydantic_ai import Agent
         from pydantic_ai.models.openai import OpenAIModel
-        # Gemini support in pydantic-ai might vary, using OpenAI-style for now or native if available
-        
         from typing import List
         from pydantic import BaseModel as PydanticBaseModel
 
@@ -90,11 +88,21 @@ class LLMConfig(BaseModel):
             used_order_ids: List[str]
 
         if self.provider == LLMProvider.OPENAI:
-            model = OpenAIModel(
-                self.model,
-                base_url=self.base_url,
-                api_key=self.api_key,
-            )
+            # For HuggingFace router, we need to configure the http_client with custom base_url
+            if self.base_url:
+                import httpx
+                http_client = httpx.Client(base_url=self.base_url)
+                model = OpenAIModel(
+                    self.model,
+                    api_key=self.api_key,
+                    http_client=http_client,
+                )
+            else:
+                model = OpenAIModel(
+                    self.model,
+                    api_key=self.api_key,
+                )
+            
             return Agent(
                 model=model,
                 result_type=OrderResponse,
@@ -106,8 +114,8 @@ class LLMConfig(BaseModel):
                 from pydantic_ai.models.gemini import GeminiModel
                 model = GeminiModel(self.model, api_key=self.api_key)
             except:
-                # Fallback to langchain or simple mock if pydantic-ai gemini fails
-                model = OpenAIModel(self.model, base_url=self.base_url, api_key=self.api_key)
+                # Fallback to OpenAI-compatible model
+                model = OpenAIModel(self.model, api_key=self.api_key)
             
             return Agent(
                 model=model,
