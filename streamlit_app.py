@@ -105,7 +105,7 @@ if prompt := st.chat_input("What would you like to know about the orders?"):
                 context = st.session_state.rag_manager.query(prompt)
                 
                 # 2. Setup LLM and Query
-                config = LLMConfig()
+                config = LLMConfig.from_env()
                 agent = config.get_agent()
                 
                 # Format context for prompt

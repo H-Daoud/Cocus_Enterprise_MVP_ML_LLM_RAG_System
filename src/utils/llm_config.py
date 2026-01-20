@@ -76,6 +76,53 @@ class LLMConfig(BaseModel):
             max_tokens=int(os.getenv("LLM_MAX_TOKENS", "1000"))
         )
 
+    def get_agent(self):
+        """Get a Pydantic AI agent based on configuration"""
+        from pydantic_ai import Agent
+        from pydantic_ai.models.openai import OpenAIModel
+        # Gemini support in pydantic-ai might vary, using OpenAI-style for now or native if available
+        
+        from typing import List
+        from pydantic import BaseModel as PydanticBaseModel
+
+        class OrderResponse(PydanticBaseModel):
+            answer: str
+            used_order_ids: List[str]
+
+        if self.provider == LLMProvider.OPENAI:
+            model = OpenAIModel(
+                self.model,
+                base_url=self.base_url,
+                api_key=self.api_key,
+            )
+            return Agent(
+                model=model,
+                result_type=OrderResponse,
+                system_prompt="You are a professional COCUS RAG Agent. Use the provided context to answer. List any Order IDs referenced."
+            )
+        elif self.provider == LLMProvider.GEMINI:
+            # Fallback for Gemini if needed, or use GeminiModel if available in installed version
+            try:
+                from pydantic_ai.models.gemini import GeminiModel
+                model = GeminiModel(self.model, api_key=self.api_key)
+            except:
+                # Fallback to langchain or simple mock if pydantic-ai gemini fails
+                model = OpenAIModel(self.model, base_url=self.base_url, api_key=self.api_key)
+            
+            return Agent(
+                model=model,
+                result_type=OrderResponse,
+                system_prompt="You are a professional COCUS RAG Agent. Use context to answer. List Order IDs."
+            )
+        else:
+            class MockResult:
+                class Data:
+                    answer = "MOCK: This is a professional response about machine learning and orders."
+                    used_order_ids = ["ORD-MOCK"]
+                data = Data()
+                def run_sync(self, *args, **kwargs): return self
+            return MockResult()
+
 
 def get_llm_client(config: Optional[LLMConfig] = None):
     """
