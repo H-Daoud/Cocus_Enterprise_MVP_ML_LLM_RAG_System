@@ -30,7 +30,8 @@ class RAGManager:
         
         self.persist_directory = persist_directory
         self.embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2"
+            model_name="sentence-transformers/all-MiniLM-L6-v2",
+            model_kwargs={'device': 'cpu'}  # Force CPU for Streamlit Cloud compatibility
         )
         self.vector_store = None
         self._initialized = True
