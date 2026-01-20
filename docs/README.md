@@ -147,6 +147,14 @@ Observability structure, Prometheus metrics, and JSON logging implementation.
 **Folder**: [`internal_summaries/`](./internal_summaries/)
 Contains `SETUP_GUIDE.md`, `ENV_VARIABLES_GUIDE.md`, `PRODUCTION_READY.md`, and other technical reference documents.
 
+### **15. CI/CD & MLOps Implementation**
+**File**: [`technical/CICD_MLOPS_IMPLEMENTATION.md`](./technical/CICD_MLOPS_IMPLEMENTATION.md)
+Detailed architectural overview of the GitHub Actions pipelines and MLOps lifecycle integration.
+
+### **16. DevOps & IaaC Guide**
+**File**: [`technical/DEVOPS_IAAC_GUIDE.md`](./technical/DEVOPS_IAAC_GUIDE.md)
+Infrastructure as Code strategy using Terraform, Kubernetes manifests, and Docker automation.
+
 ---
 
 ## 🗂️ Quick Reference
