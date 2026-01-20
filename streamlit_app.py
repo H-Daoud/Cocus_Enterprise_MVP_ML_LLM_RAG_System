@@ -106,7 +106,7 @@ if prompt := st.chat_input("What would you like to know about the orders?"):
                 
                 # 2. Setup LLM using LangChain (more reliable for Streamlit Cloud)
                 from src.utils.llm_config import get_llm_client
-                from langchain.schema import HumanMessage, SystemMessage
+                from langchain_core.messages import HumanMessage, SystemMessage
                 
                 llm = get_llm_client()
                 
