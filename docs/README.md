@@ -155,6 +155,10 @@ Detailed architectural overview of the GitHub Actions pipelines and MLOps lifecy
 **File**: [`technical/DEVOPS_IAAC_GUIDE.md`](./technical/DEVOPS_IAAC_GUIDE.md)
 Infrastructure as Code strategy using Terraform, Kubernetes manifests, and Docker automation.
 
+### **17. Project Presentation (Canva Ready)**
+**File**: [`presentation.md`](./presentation.md)
+Slide-by-slide summary of the entire system lifecycle (A-Z) for stakeholders and PMs.
+
 ---
 
 ## 🗂️ Quick Reference
