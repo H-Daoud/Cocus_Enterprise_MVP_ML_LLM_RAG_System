@@ -1,0 +1,245 @@
+COCUS-MVP_ML_LLM_RAG_System/
+│
+├── README.md                                    # Project documentation
+├── .gitignore                                   # Git ignore rules
+├── requirements.txt                             # Python dependencies
+├── LICENSE                                      # Project license
+├── .env.example                                 # Environment variables template
+├── pyproject.toml                               # Python project configuration
+├── setup.py                                     # Package setup script
+│
+├── data/                                        # Data directory
+│   ├── raw/                                     # Raw, unprocessed data
+│   │   └── orders_sample.ndjson                 # Sample order data (51 records)
+│   ├── processed/                               # Cleaned and validated data
+│   │   ├── valid_orders.ndjson                  # Successfully validated orders
+│   │   └── rejected_orders.ndjson               # Rejected/invalid orders
+│   └── reports/                                 # Data quality reports
+│       ├── data_quality_report.json             # Validation statistics
+│       └── validation_summary.txt               # Human-readable summary
+│
+├── docs/                                        # Documentation
+│   ├── Challenge LLM-RAG Part 2.pdf             # LLM-RAG challenge specification
+│   ├── Data Validation Challenge Part 1.pdf     # Data validation challenge spec
+│   ├── architecture.md                          # System architecture documentation
+│   ├── api_documentation.md                     # API endpoints documentation
+│   └── user_guide.md                            # User guide
+│
+├── src/                                         # Source code
+│   ├── __init__.py
+│   │
+│   ├── models/                                  # Pydantic data models
+│   │   ├── __init__.py
+│   │   ├── order.py                             # Order data model
+│   │   ├── shipping.py                          # Shipping data model
+│   │   └── validation_result.py                 # Validation result model
+│   │
+│   ├── validators/                              # Data validation logic
+│   │   ├── __init__.py
+│   │   ├── business_rules.py                    # Business rule validators
+│   │   ├── data_normalizer.py                   # Data normalization utilities
+│   │   ├── email_validator.py                   # Email validation
+│   │   └── url_validator.py                     # URL validation
+│   │
+│   ├── processors/                              # Data processing pipeline
+│   │   ├── __init__.py
+│   │   ├── order_processor.py                   # Order data processor
+│   │   ├── quality_analyzer.py                  # Data quality analysis
+│   │   └── batch_processor.py                   # Batch processing utilities
+│   │
+│   ├── rag/                                     # RAG system components
+│   │   ├── __init__.py
+│   │   ├── retriever.py                         # Document retrieval
+│   │   ├── generator.py                         # Response generation
+│   │   ├── embeddings.py                        # Vector embeddings
+│   │   ├── chunker.py                           # Document chunking
+│   │   └── vector_store.py                      # Vector database interface
+│   │
+│   ├── api/                                     # API endpoints
+│   │   ├── __init__.py
+│   │   ├── main.py                              # FastAPI application
+│   │   ├── routes/                              # API routes
+│   │   │   ├── __init__.py
+│   │   │   ├── validation.py                    # Validation endpoints
+│   │   │   └── rag.py                           # RAG endpoints
+│   │   └── middleware/                          # API middleware
+│   │       ├── __init__.py
+│   │       └── error_handler.py                 # Error handling
+│   │
+│   └── utils/                                   # Utility functions
+│       ├── __init__.py
+│       ├── file_io.py                           # File I/O utilities
+│       ├── logger.py                            # Logging configuration
+│       └── config.py                            # Configuration management
+│
+├── scripts/                                     # Utility scripts
+│   ├── validate_orders.py                       # Main validation script
+│   ├── generate_report.py                       # Report generation
+│   ├── setup_environment.py                     # Environment setup
+│   ├── export_models.py                         # Export Pydantic models
+│   └── run_pipeline.py                          # Full pipeline execution
+│
+├── tests/                                       # Test suite
+│   ├── __init__.py
+│   ├── conftest.py                              # Pytest configuration
+│   ├── fixtures/                                # Test fixtures
+│   │   ├── __init__.py
+│   │   └── sample_data.py                       # Sample test data
+│   ├── unit/                                    # Unit tests
+│   │   ├── __init__.py
+│   │   ├── test_models.py                       # Model tests
+│   │   ├── test_validators.py                   # Validator tests
+│   │   └── test_processors.py                   # Processor tests
+│   ├── integration/                             # Integration tests
+│   │   ├── __init__.py
+│   │   ├── test_pipeline.py                     # Pipeline integration tests
+│   │   └── test_api.py                          # API integration tests
+│   └── e2e/                                     # End-to-end tests
+│       ├── __init__.py
+│       └── test_full_workflow.py                # Full workflow tests
+│
+├── notebooks/                                   # Jupyter notebooks
+│   ├── 01_data_exploration.ipynb                # Data exploration
+│   ├── 02_validation_analysis.ipynb             # Validation analysis
+│   ├── 03_business_rules.ipynb                  # Business rules development
+│   ├── 04_rag_experiments.ipynb                 # RAG experiments
+│   └── 05_performance_analysis.ipynb            # Performance analysis
+│
+├── config/                                      # Configuration files
+│   ├── validation_rules.yaml                    # Validation rule definitions
+│   ├── rag_config.yaml                          # RAG system configuration
+│   ├── logging_config.yaml                      # Logging configuration
+│   └── api_config.yaml                          # API configuration
+│
+├── .github/                                     # GitHub specific files
+│   ├── workflows/                               # GitHub Actions workflows
+│   │   ├── ci.yml                               # Continuous Integration
+│   │   ├── tests.yml                            # Test automation
+│   │   └── deploy.yml                           # Deployment workflow
+│   └── ISSUE_TEMPLATE/                          # Issue templates
+│       ├── bug_report.md
+│       └── feature_request.md
+│
+├── docker/                                      # Docker configuration
+│   ├── Dockerfile                               # Main Dockerfile
+│   ├── docker-compose.yml                       # Docker Compose configuration
+│   └── .dockerignore                            # Docker ignore rules
+│
+└── logs/                                        # Application logs
+    ├── validation.log                           # Validation logs
+    ├── api.log                                  # API logs
+    └── rag.log                                  # RAG system logs
+
+
+═══════════════════════════════════════════════════════════════════════════════
+DIRECTORY SUMMARY
+═══════════════════════════════════════════════════════════════════════════════
+
+Total Directories: 25
+Total Files (estimated): 80+
+
+Key Directories:
+  • data/          - All data files (raw, processed, reports)
+  • src/           - Main source code
+  • tests/         - Comprehensive test suite
+  • scripts/       - Utility and execution scripts
+  • notebooks/     - Jupyter notebooks for analysis
+  • config/        - Configuration files
+  • docs/          - Documentation and specifications
+  • docker/        - Containerization files
+  • .github/       - CI/CD workflows
+
+Technology Stack:
+  • Python 3.8+
+  • Pydantic (data validation)
+  • FastAPI (API framework)
+  • LangChain (LLM framework)
+  • ChromaDB/Pinecone (vector database)
+  • pytest (testing)
+  • Docker (containerization)
+
+═══════════════════════════════════════════════════════════════════════════════
+## Testing Checklist
+
+### 🚀 One-Click Testing
+Run all tests automatically:
+```bash
+./test-all.sh
+```
+
+### Setup (5 min)
+- [ ] Clone repository
+- [ ] Run `./setup.sh` - [View Script](setup.sh)
+- [ ] Run `./run.sh` - [View Script](run.sh)
+- [ ] Access [API Documentation](http://localhost:8000/api/docs)
+
+### Basic Tests (10 min)
+Click to run individual tests:
+
+- [ ] **Health Check** - [🔗 Open](http://localhost:8000/api/health) | [▶️ Run Test](tests/manual/test-health.sh)
+  ```bash
+  ./tests/manual/test-health.sh
+  ```
+
+- [ ] **API Documentation** - [🔗 Open](http://localhost:8000/api/docs) | [▶️ Run Test](tests/manual/test-api-docs.sh)
+  ```bash
+  ./tests/manual/test-api-docs.sh
+  ```
+
+- [ ] **Data Validation** - [▶️ Run Test](tests/manual/test-validation.sh)
+  ```bash
+  ./tests/manual/test-validation.sh
+  ```
+
+- [ ] **RAG Query** - [▶️ Run Test](tests/manual/test-rag.sh)
+  ```bash
+  ./tests/manual/test-rag.sh
+  ```
+
+### Enterprise Features (15 min)
+Click to run individual tests:
+
+- [ ] **GDPR Anonymization** - [▶️ Run Test](tests/manual/test-gdpr.sh)
+  ```bash
+  ./tests/manual/test-gdpr.sh
+  ```
+
+- [ ] **EU AI Act Audit Logs** - [▶️ Run Test](tests/manual/test-audit.sh)
+  ```bash
+  ./tests/manual/test-audit.sh
+  ```
+
+- [ ] **Error Handling** - [▶️ Run Test](tests/manual/test-errors.sh)
+  ```bash
+  ./tests/manual/test-errors.sh
+  ```
+
+- [ ] **Performance** - [▶️ Run Test](tests/manual/test-performance.sh)
+  ```bash
+  ./tests/manual/test-performance.sh
+  ```
+
+### 💬 Chat UI for PM Testing
+Visual interface for testing RAG chat:
+
+- [ ] **Open Chat UI** - [▶️ Open](chat-ui.html) | [🚀 Launch Script](open-chat.sh)
+  ```bash
+  ./open-chat.sh  # Opens in browser automatically
+  ```
+  
+  **Features:**
+  - 💬 Interactive chat interface
+  - 📊 Real-time AI responses
+  - 📚 Source citations display
+  - ✅ Connection status indicator
+  - 🎨 Beautiful, modern design
+  
+  **Direct access:** Open `chat-ui.html` in your browser
+
+### Automated Test Suite
+Run the complete test suite:
+```bash
+./test-all.sh  # Runs all 8 tests above automatically
+```
+
+Expected output: ✅ ALL TESTS PASSED!

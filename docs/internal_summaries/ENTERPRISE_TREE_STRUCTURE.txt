@@ -1,0 +1,760 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║              COCUS-MVP ML/LLM RAG SYSTEM - ENTERPRISE EDITION                 ║
+║                    COMPLETE PRODUCTION-READY STRUCTURE                        ║
+║          CI/CD | MLOps | Security | GDPR | EU AI Act Compliant               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+COCUS-MVP_ML_LLM_RAG_System/
+│
+├── README.md
+├── LICENSE
+├── .gitignore
+├── .dockerignore
+├── .env.example
+├── pyproject.toml
+├── setup.py
+├── requirements.txt
+├── requirements-dev.txt
+├── Makefile
+├── docker-compose.yml
+├── VERSION
+│
+├── .github/                                     # CI/CD & GitHub Actions
+│   ├── workflows/
+│   │   ├── ci.yml                               # Continuous Integration
+│   │   ├── cd.yml                               # Continuous Deployment
+│   │   ├── security-scan.yml                    # Security scanning (Snyk, Trivy)
+│   │   ├── code-quality.yml                     # Code quality checks
+│   │   ├── ml-pipeline.yml                      # ML training pipeline
+│   │   ├── model-validation.yml                 # Model validation & testing
+│   │   ├── docker-build.yml                     # Docker image build & push
+│   │   ├── compliance-check.yml                 # GDPR & EU AI Act compliance
+│   │   └── performance-test.yml                 # Load & performance testing
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md
+│   │   ├── feature_request.md
+│   │   └── security_vulnerability.md
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── dependabot.yml                           # Automated dependency updates
+│
+├── .gitlab-ci.yml                               # GitLab CI/CD (alternative)
+├── Jenkinsfile                                  # Jenkins pipeline (alternative)
+│
+├── infrastructure/                              # Infrastructure as Code (IaC)
+│   ├── terraform/                               # Terraform configurations
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   ├── outputs.tf
+│   │   ├── backend.tf
+│   │   ├── modules/
+│   │   │   ├── vpc/
+│   │   │   ├── eks/                             # Kubernetes cluster
+│   │   │   ├── rds/                             # Database
+│   │   │   ├── s3/                              # Object storage
+│   │   │   ├── ecr/                             # Container registry
+│   │   │   └── monitoring/                      # CloudWatch/Prometheus
+│   │   └── environments/
+│   │       ├── dev/
+│   │       ├── staging/
+│   │       └── production/
+│   │
+│   ├── kubernetes/                              # K8s manifests
+│   │   ├── namespaces/
+│   │   ├── deployments/
+│   │   │   ├── api-deployment.yaml
+│   │   │   ├── ml-service-deployment.yaml
+│   │   │   └── rag-service-deployment.yaml
+│   │   ├── services/
+│   │   ├── ingress/
+│   │   ├── configmaps/
+│   │   ├── secrets/
+│   │   ├── hpa/                                 # Horizontal Pod Autoscaler
+│   │   └── monitoring/
+│   │       ├── prometheus/
+│   │       ├── grafana/
+│   │       └── alertmanager/
+│   │
+│   ├── helm/                                    # Helm charts
+│   │   ├── Chart.yaml
+│   │   ├── values.yaml
+│   │   ├── values-dev.yaml
+│   │   ├── values-staging.yaml
+│   │   ├── values-prod.yaml
+│   │   └── templates/
+│   │
+│   └── ansible/                                 # Configuration management
+│       ├── playbooks/
+│       ├── roles/
+│       └── inventory/
+│
+├── docker/                                      # Docker configurations
+│   ├── Dockerfile.api                           # API service
+│   ├── Dockerfile.ml                            # ML service
+│   ├── Dockerfile.rag                           # RAG service
+│   ├── Dockerfile.frontend                      # Frontend
+│   ├── Dockerfile.nginx                         # Nginx reverse proxy
+│   ├── docker-compose.dev.yml
+│   ├── docker-compose.prod.yml
+│   └── .dockerignore
+│
+├── data/                                        # Data Management (MLOps)
+│   ├── raw/                                     # Raw data (immutable)
+│   │   └── orders_sample.ndjson
+│   │
+│   ├── interim/                                 # Intermediate processed data
+│   │
+│   ├── processed/                               # Final processed data
+│   │   ├── train/                               # Training set (Andrew Ng split)
+│   │   ├── train_dev/                           # Train-dev set (for bias detection)
+│   │   ├── dev/                                 # Development/validation set
+│   │   ├── test/                                # Test set (hold-out)
+│   │   ├── valid_orders.ndjson
+│   │   └── rejected_orders.ndjson
+│   │
+│   ├── external/                                # External data sources
+│   │
+│   ├── embeddings/                              # Vector embeddings
+│   │   ├── train/
+│   │   ├── dev/
+│   │   └── test/
+│   │
+│   ├── reports/                                 # Data quality reports
+│   │   ├── data_quality_report.json
+│   │   ├── data_drift_report.html
+│   │   ├── validation_summary.txt
+│   │   └── eda_report.html
+│   │
+│   └── dvc/                                     # DVC (Data Version Control)
+│       ├── .dvc
+│       └── .dvcignore
+│
+├── models/                                      # ML Models (MLOps)
+│   ├── trained/                                 # Trained models
+│   │   ├── validation/
+│   │   │   ├── model_v1.0.0.pkl
+│   │   │   └── model_metadata.json
+│   │   └── rag/
+│   │       ├── embeddings_model/
+│   │       └── llm_config.json
+│   │
+│   ├── registry/                                # Model registry metadata
+│   │   ├── model_registry.db
+│   │   └── model_versions.json
+│   │
+│   ├── experiments/                             # Experiment tracking
+│   │   └── mlruns/                              # MLflow runs
+│   │
+│   └── benchmarks/                              # Model benchmarks
+│       ├── performance_metrics.json
+│       └── comparison_reports/
+│
+├── mlops/                                       # MLOps Infrastructure
+│   ├── mlflow/                                  # MLflow configuration
+│   │   ├── mlflow_config.yaml
+│   │   └── tracking_server/
+│   │
+│   ├── kubeflow/                                # Kubeflow pipelines
+│   │   ├── pipelines/
+│   │   │   ├── training_pipeline.py
+│   │   │   ├── validation_pipeline.py
+│   │   │   └── deployment_pipeline.py
+│   │   └── components/
+│   │
+│   ├── airflow/                                 # Apache Airflow DAGs
+│   │   ├── dags/
+│   │   │   ├── data_validation_dag.py
+│   │   │   ├── model_training_dag.py
+│   │   │   ├── model_deployment_dag.py
+│   │   │   └── monitoring_dag.py
+│   │   └── plugins/
+│   │
+│   ├── feature_store/                           # Feature store (Feast)
+│   │   ├── feature_repo/
+│   │   ├── features.py
+│   │   └── feature_registry.db
+│   │
+│   └── monitoring/                              # Model monitoring
+│       ├── drift_detection/
+│       ├── performance_tracking/
+│       └── alerts/
+│
+├── src/                                         # Source Code
+│   ├── __init__.py
+│   │
+│   ├── models/                                  # Pydantic Data Models
+│   │   ├── __init__.py
+│   │   ├── order.py
+│   │   ├── shipping.py
+│   │   ├── validation_result.py
+│   │   ├── user.py
+│   │   └── audit_log.py
+│   │
+│   ├── validators/                              # Data Validation
+│   │   ├── __init__.py
+│   │   ├── business_rules.py
+│   │   ├── data_normalizer.py
+│   │   ├── email_validator.py
+│   │   ├── url_validator.py
+│   │   ├── gdpr_validator.py                    # GDPR compliance checks
+│   │   └── pii_detector.py                      # PII detection
+│   │
+│   ├── processors/                              # Data Processing
+│   │   ├── __init__.py
+│   │   ├── order_processor.py
+│   │   ├── quality_analyzer.py
+│   │   ├── batch_processor.py
+│   │   └── data_anonymizer.py                   # GDPR anonymization
+│   │
+│   ├── ml/                                      # Machine Learning
+│   │   ├── __init__.py
+│   │   ├── preprocessing/
+│   │   │   ├── __init__.py
+│   │   │   ├── feature_engineering.py
+│   │   │   ├── data_splitter.py                 # Andrew Ng splits
+│   │   │   └── data_augmentation.py
+│   │   │
+│   │   ├── training/
+│   │   │   ├── __init__.py
+│   │   │   ├── trainer.py
+│   │   │   ├── hyperparameter_tuning.py
+│   │   │   └── cross_validation.py
+│   │   │
+│   │   ├── evaluation/
+│   │   │   ├── __init__.py
+│   │   │   ├── metrics.py
+│   │   │   ├── bias_detection.py                # Train-dev analysis
+│   │   │   ├── variance_analysis.py             # Dev set analysis
+│   │   │   └── error_analysis.py
+│   │   │
+│   │   └── inference/
+│   │       ├── __init__.py
+│   │       ├── predictor.py
+│   │       └── batch_inference.py
+│   │
+│   ├── rag/                                     # RAG System
+│   │   ├── __init__.py
+│   │   ├── retriever.py
+│   │   ├── generator.py
+│   │   ├── embeddings.py
+│   │   ├── chunker.py
+│   │   ├── vector_store.py
+│   │   ├── reranker.py
+│   │   └── prompt_templates.py
+│   │
+│   ├── api/                                     # Backend API
+│   │   ├── __init__.py
+│   │   ├── main.py                              # FastAPI application
+│   │   ├── dependencies.py
+│   │   │
+│   │   ├── routes/
+│   │   │   ├── __init__.py
+│   │   │   ├── health.py                        # Health checks
+│   │   │   ├── validation.py                    # Validation endpoints
+│   │   │   ├── rag.py                           # RAG endpoints
+│   │   │   ├── ml.py                            # ML prediction endpoints
+│   │   │   ├── admin.py                         # Admin endpoints
+│   │   │   └── monitoring.py                    # Metrics endpoints
+│   │   │
+│   │   ├── middleware/
+│   │   │   ├── __init__.py
+│   │   │   ├── error_handler.py
+│   │   │   ├── authentication.py                # JWT/OAuth
+│   │   │   ├── authorization.py                 # RBAC
+│   │   │   ├── rate_limiting.py
+│   │   │   ├── cors.py
+│   │   │   ├── audit_logging.py                 # Compliance logging
+│   │   │   └── request_validation.py
+│   │   │
+│   │   └── schemas/
+│   │       ├── __init__.py
+│   │       ├── requests.py
+│   │       └── responses.py
+│   │
+│   ├── security/                                # Security Module
+│   │   ├── __init__.py
+│   │   ├── encryption.py                        # Data encryption
+│   │   ├── authentication.py                    # Auth mechanisms
+│   │   ├── authorization.py                     # Access control
+│   │   ├── secrets_manager.py                   # Secrets management
+│   │   ├── input_sanitization.py                # XSS/SQL injection prevention
+│   │   └── audit_trail.py                       # Security audit logs
+│   │
+│   ├── compliance/                              # Compliance Module
+│   │   ├── __init__.py
+│   │   ├── gdpr/
+│   │   │   ├── __init__.py
+│   │   │   ├── data_subject_rights.py           # Right to access, delete, etc.
+│   │   │   ├── consent_management.py
+│   │   │   ├── data_retention.py
+│   │   │   └── privacy_impact_assessment.py
+│   │   │
+│   │   ├── eu_ai_act/
+│   │   │   ├── __init__.py
+│   │   │   ├── risk_assessment.py               # AI risk classification
+│   │   │   ├── transparency.py                  # AI transparency requirements
+│   │   │   ├── human_oversight.py
+│   │   │   ├── accuracy_robustness.py
+│   │   │   └── documentation.py                 # Technical documentation
+│   │   │
+│   │   └── reporting/
+│   │       ├── __init__.py
+│   │       ├── compliance_report.py
+│   │       └── audit_report.py
+│   │
+│   ├── monitoring/                              # Monitoring & Observability
+│   │   ├── __init__.py
+│   │   ├── metrics.py                           # Prometheus metrics
+│   │   ├── logging.py                           # Structured logging
+│   │   ├── tracing.py                           # Distributed tracing (Jaeger)
+│   │   ├── alerting.py                          # Alert management
+│   │   ├── model_monitoring.py                  # ML model monitoring
+│   │   └── data_quality_monitoring.py
+│   │
+│   └── utils/
+│       ├── __init__.py
+│       ├── file_io.py
+│       ├── logger.py
+│       ├── config.py
+│       ├── cache.py
+│       └── helpers.py
+│
+├── frontend/                                    # Frontend Application (PM Testing)
+│   ├── public/
+│   │   ├── index.html
+│   │   ├── favicon.ico
+│   │   └── assets/
+│   │
+│   ├── src/
+│   │   ├── App.tsx
+│   │   ├── index.tsx
+│   │   │
+│   │   ├── components/
+│   │   │   ├── DataValidation/
+│   │   │   │   ├── UploadForm.tsx
+│   │   │   │   ├── ValidationResults.tsx
+│   │   │   │   └── QualityReport.tsx
+│   │   │   │
+│   │   │   ├── RAG/
+│   │   │   │   ├── ChatInterface.tsx
+│   │   │   │   ├── QueryInput.tsx
+│   │   │   │   ├── ResponseDisplay.tsx
+│   │   │   │   └── SourceCitations.tsx
+│   │   │   │
+│   │   │   ├── Admin/
+│   │   │   │   ├── Dashboard.tsx
+│   │   │   │   ├── ModelManagement.tsx
+│   │   │   │   ├── UserManagement.tsx
+│   │   │   │   └── CompliancePanel.tsx
+│   │   │   │
+│   │   │   └── Monitoring/
+│   │   │       ├── MetricsDashboard.tsx
+│   │   │       ├── ModelPerformance.tsx
+│   │   │       └── DataQuality.tsx
+│   │   │
+│   │   ├── services/
+│   │   │   ├── api.ts
+│   │   │   ├── auth.ts
+│   │   │   └── websocket.ts
+│   │   │
+│   │   ├── hooks/
+│   │   ├── utils/
+│   │   └── styles/
+│   │
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── .eslintrc.js
+│   └── vite.config.ts
+│
+├── scripts/                                     # Utility Scripts
+│   ├── data/
+│   │   ├── validate_orders.py
+│   │   ├── generate_report.py
+│   │   ├── split_dataset.py                     # Andrew Ng splits
+│   │   └── data_versioning.py
+│   │
+│   ├── ml/
+│   │   ├── train_model.py
+│   │   ├── evaluate_model.py
+│   │   ├── deploy_model.py
+│   │   └── benchmark_model.py
+│   │
+│   ├── deployment/
+│   │   ├── deploy_dev.sh
+│   │   ├── deploy_staging.sh
+│   │   ├── deploy_prod.sh
+│   │   └── rollback.sh
+│   │
+│   ├── security/
+│   │   ├── scan_vulnerabilities.sh
+│   │   ├── rotate_secrets.py
+│   │   └── audit_access.py
+│   │
+│   └── compliance/
+│       ├── generate_gdpr_report.py
+│       ├── generate_ai_act_report.py
+│       └── export_audit_logs.py
+│
+├── tests/                                       # Comprehensive Testing
+│   ├── __init__.py
+│   ├── conftest.py
+│   │
+│   ├── unit/                                    # Unit Tests
+│   │   ├── __init__.py
+│   │   ├── test_models.py
+│   │   ├── test_validators.py
+│   │   ├── test_processors.py
+│   │   ├── test_ml_preprocessing.py
+│   │   ├── test_rag_components.py
+│   │   └── test_security.py
+│   │
+│   ├── integration/                             # Integration Tests
+│   │   ├── __init__.py
+│   │   ├── test_api_endpoints.py
+│   │   ├── test_ml_pipeline.py
+│   │   ├── test_rag_pipeline.py
+│   │   ├── test_database.py
+│   │   └── test_authentication.py
+│   │
+│   ├── e2e/                                     # End-to-End Tests
+│   │   ├── __init__.py
+│   │   ├── test_validation_workflow.py
+│   │   ├── test_rag_workflow.py
+│   │   └── test_user_journey.py
+│   │
+│   ├── performance/                             # Performance Tests
+│   │   ├── __init__.py
+│   │   ├── load_test.py                         # Locust/K6
+│   │   ├── stress_test.py
+│   │   └── benchmark.py
+│   │
+│   ├── security/                                # Security Tests
+│   │   ├── __init__.py
+│   │   ├── test_authentication.py
+│   │   ├── test_authorization.py
+│   │   ├── test_input_validation.py
+│   │   └── penetration_tests.py
+│   │
+│   ├── compliance/                              # Compliance Tests
+│   │   ├── __init__.py
+│   │   ├── test_gdpr_compliance.py
+│   │   ├── test_ai_act_compliance.py
+│   │   └── test_audit_logging.py
+│   │
+│   ├── ml/                                      # ML-specific Tests
+│   │   ├── __init__.py
+│   │   ├── test_data_splits.py                  # Validate Andrew Ng splits
+│   │   ├── test_model_training.py
+│   │   ├── test_model_evaluation.py
+│   │   ├── test_bias_detection.py
+│   │   └── test_model_drift.py
+│   │
+│   └── fixtures/
+│       ├── __init__.py
+│       ├── sample_data.py
+│       └── mock_responses.py
+│
+├── notebooks/                                   # Jupyter Notebooks (EDA)
+│   ├── 01_exploratory_data_analysis.ipynb       # EDA
+│   ├── 02_data_quality_assessment.ipynb
+│   ├── 03_feature_engineering.ipynb
+│   ├── 04_model_development.ipynb
+│   ├── 05_model_evaluation.ipynb                # Andrew Ng methodology
+│   ├── 06_bias_variance_analysis.ipynb          # Train-dev vs Dev analysis
+│   ├── 07_rag_experiments.ipynb
+│   ├── 08_performance_optimization.ipynb
+│   └── 09_compliance_analysis.ipynb
+│
+├── docs/                                        # Documentation
+│   ├── Challenge LLM-RAG Part 2.pdf
+│   ├── Data Validation Challenge Part 1.pdf
+│   │
+│   ├── architecture/
+│   │   ├── system_architecture.md
+│   │   ├── data_flow.md
+│   │   ├── ml_pipeline.md
+│   │   ├── rag_architecture.md
+│   │   └── security_architecture.md
+│   │
+│   ├── api/
+│   │   ├── api_documentation.md
+│   │   ├── openapi.yaml                         # OpenAPI/Swagger spec
+│   │   └── postman_collection.json
+│   │
+│   ├── compliance/
+│   │   ├── gdpr_compliance.md
+│   │   ├── eu_ai_act_compliance.md
+│   │   ├── data_protection_policy.md
+│   │   ├── privacy_policy.md
+│   │   └── risk_assessment.md
+│   │
+│   ├── mlops/
+│   │   ├── model_card.md                        # Model documentation
+│   │   ├── data_card.md                         # Dataset documentation
+│   │   ├── training_methodology.md              # Andrew Ng approach
+│   │   ├── evaluation_strategy.md
+│   │   └── deployment_guide.md
+│   │
+│   ├── user_guides/
+│   │   ├── user_manual.md
+│   │   ├── pm_testing_guide.md                  # For PM to test RAG
+│   │   ├── admin_guide.md
+│   │   └── developer_guide.md
+│   │
+│   └── runbooks/
+│       ├── deployment_runbook.md
+│       ├── incident_response.md
+│       ├── disaster_recovery.md
+│       └── monitoring_runbook.md
+│
+├── config/                                      # Configuration Files
+│   ├── app/
+│   │   ├── development.yaml
+│   │   ├── staging.yaml
+│   │   ├── production.yaml
+│   │   └── test.yaml
+│   │
+│   ├── ml/
+│   │   ├── training_config.yaml
+│   │   ├── model_config.yaml
+│   │   └── hyperparameters.yaml
+│   │
+│   ├── rag/
+│   │   ├── rag_config.yaml
+│   │   ├── embeddings_config.yaml
+│   │   └── llm_config.yaml
+│   │
+│   ├── monitoring/
+│   │   ├── prometheus.yml
+│   │   ├── grafana_dashboards/
+│   │   └── alerting_rules.yml
+│   │
+│   ├── security/
+│   │   ├── security_policy.yaml
+│   │   ├── rbac_rules.yaml
+│   │   └── encryption_config.yaml
+│   │
+│   └── compliance/
+│       ├── gdpr_config.yaml
+│       ├── ai_act_config.yaml
+│       └── audit_config.yaml
+│
+├── logs/                                        # Application Logs
+│   ├── app/
+│   ├── ml/
+│   ├── security/
+│   └── audit/
+│
+├── monitoring/                                  # Monitoring Dashboards
+│   ├── grafana/
+│   │   ├── dashboards/
+│   │   │   ├── api_metrics.json
+│   │   │   ├── ml_model_performance.json
+│   │   │   ├── data_quality.json
+│   │   │   └── security_metrics.json
+│   │   └── provisioning/
+│   │
+│   └── prometheus/
+│       ├── rules/
+│       └── targets/
+│
+├── security/                                    # Security Artifacts
+│   ├── certificates/
+│   ├── keys/                                    # (gitignored)
+│   ├── policies/
+│   │   ├── security_policy.md
+│   │   ├── incident_response_plan.md
+│   │   └── vulnerability_management.md
+│   │
+│   └── scans/
+│       ├── dependency_scan_results/
+│       ├── container_scan_results/
+│       └── code_scan_results/
+│
+└── compliance/                                  # Compliance Artifacts
+    ├── gdpr/
+    │   ├── data_processing_agreement.pdf
+    │   ├── privacy_impact_assessment.pdf
+    │   ├── data_retention_policy.md
+    │   └── consent_records/
+    │
+    ├── eu_ai_act/
+    │   ├── risk_classification.md
+    │   ├── conformity_assessment.pdf
+    │   ├── technical_documentation.md
+    │   ├── transparency_requirements.md
+    │   └── human_oversight_procedures.md
+    │
+    └── audit_logs/
+        ├── access_logs/
+        ├── data_processing_logs/
+        └── model_decision_logs/
+
+
+═══════════════════════════════════════════════════════════════════════════════
+ENTERPRISE FEATURES SUMMARY
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ CI/CD & DevOps:
+   • GitHub Actions workflows (CI, CD, security, quality)
+   • GitLab CI / Jenkins alternatives
+   • Infrastructure as Code (Terraform)
+   • Kubernetes orchestration
+   • Helm charts for deployment
+   • Docker multi-stage builds
+
+✅ MLOps:
+   • MLflow for experiment tracking
+   • Kubeflow for ML pipelines
+   • Apache Airflow for orchestration
+   • Feature store (Feast)
+   • Model registry
+   • Data versioning (DVC)
+   • Andrew Ng dataset splits: Train, Train-dev, Dev, Test
+
+✅ Security:
+   • Authentication & Authorization (JWT, OAuth, RBAC)
+   • Encryption (at rest & in transit)
+   • Input sanitization
+   • Secrets management
+   • Security scanning (Snyk, Trivy)
+   • Audit trails
+   • Penetration testing
+
+✅ Compliance:
+   • GDPR compliance module
+     - Data subject rights (access, delete, portability)
+     - Consent management
+     - Data retention policies
+     - Privacy impact assessments
+   
+   • EU AI Act compliance module
+     - Risk assessment & classification
+     - Transparency requirements
+     - Human oversight mechanisms
+     - Accuracy & robustness validation
+     - Technical documentation
+
+✅ Monitoring & Observability:
+   • Prometheus metrics
+   • Grafana dashboards
+   • Distributed tracing (Jaeger)
+   • Structured logging
+   • Model performance monitoring
+   • Data drift detection
+   • Alerting & incident management
+
+✅ Testing:
+   • Unit tests
+   • Integration tests
+   • End-to-end tests
+   • Performance tests (load, stress)
+   • Security tests
+   • Compliance tests
+   • ML-specific tests (bias, drift, splits validation)
+
+✅ Frontend for PM Testing:
+   • React/TypeScript application
+   • Data validation interface
+   • RAG chat interface with source citations
+   • Admin dashboard
+   • Monitoring dashboards
+   • Model management UI
+   • Compliance reporting UI
+
+✅ ML Best Practices (Andrew Ng):
+   • Train set: Main training data
+   • Train-dev set: Detect overfitting (bias detection)
+   • Dev set: Hyperparameter tuning (variance analysis)
+   • Test set: Final evaluation (hold-out set)
+   • Error analysis framework
+   • Bias-variance decomposition
+
+
+═══════════════════════════════════════════════════════════════════════════════
+TECHNOLOGY STACK
+═══════════════════════════════════════════════════════════════════════════════
+
+Backend:
+  • Python 3.10+, FastAPI, Pydantic
+  • PostgreSQL, Redis
+  • Celery (async tasks)
+
+ML/AI:
+  • Scikit-learn, TensorFlow/PyTorch
+  • LangChain, OpenAI API
+  • ChromaDB/Pinecone
+  • MLflow, DVC
+
+Frontend:
+  • React 18+, TypeScript
+  • Vite, TailwindCSS
+  • React Query, Zustand
+
+Infrastructure:
+  • Docker, Kubernetes
+  • Terraform, Helm
+  • AWS/GCP/Azure
+
+CI/CD:
+  • GitHub Actions
+  • ArgoCD (GitOps)
+
+Monitoring:
+  • Prometheus, Grafana
+  • Jaeger, ELK Stack
+
+Security:
+  • Vault (secrets)
+  • Snyk, Trivy
+  • OAuth 2.0, JWT
+
+
+═══════════════════════════════════════════════════════════════════════════════
+DEPLOYMENT ENVIRONMENTS
+═══════════════════════════════════════════════════════════════════════════════
+
+Development:
+  • Local Docker Compose
+  • Automated testing
+  • Fast iteration
+
+Staging:
+  • Kubernetes cluster
+  • Production-like environment
+  • PM testing environment
+  • Integration testing
+
+Production:
+  • Multi-region deployment
+  • Auto-scaling
+  • High availability
+  • Disaster recovery
+  • Compliance monitoring
+
+
+═══════════════════════════════════════════════════════════════════════════════
+COMPLIANCE CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+GDPR:
+  ✓ Data minimization
+  ✓ Purpose limitation
+  ✓ Storage limitation
+  ✓ Data subject rights (access, rectification, erasure)
+  ✓ Consent management
+  ✓ Data protection by design
+  ✓ Privacy impact assessments
+  ✓ Breach notification procedures
+
+EU AI Act:
+  ✓ Risk classification (High-risk AI system)
+  ✓ Conformity assessment
+  ✓ Technical documentation
+  ✓ Record-keeping (logs)
+  ✓ Transparency & information to users
+  ✓ Human oversight
+  ✓ Accuracy, robustness, cybersecurity
+  ✓ Quality management system
+
+
+═══════════════════════════════════════════════════════════════════════════════

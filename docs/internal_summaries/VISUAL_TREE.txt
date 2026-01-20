@@ -1,0 +1,46 @@
+COCUS-MVP-SYSTEM/
+├── main.py                    # Master orchestrator & Entry point
+├── README.md                  # Main documentation
+├── requirements.txt           # Core dependencies
+├── Makefile                   # Build & Automation targets
+│
+├── scripts/                   # ⚡ Execution Layer
+│   ├── run.sh                 # Start FastAPI Server
+│   ├── setup.sh               # One-click Setup
+│   ├── reindex.sh             # Vector index maintenance
+│   ├── quick-start.sh         # Speed-run setup
+│   ├── open-chat.sh           # Browser UI launcher
+│   └── utils/                 # Internal helper scripts
+│
+├── src/                       # 🐍 Source Code (Logic)
+│   ├── api/                   # Web API (FastAPI)
+│   ├── rag/                   # RAG & Embeddings
+│   ├── ml/                    # Anomaly detection
+│   ├── models/                # Data structures (Pydantic)
+│   ├── privacy/               # GDPR/Anonymization
+│   └── compliance/            # Audit & Governance logic
+│
+├── docker/                    # 🐳 Containerization
+│   ├── docker-compose.yml     # Local orchestration
+│   ├── Dockerfile             # Production builds
+│   └── Dockerfile.slim        # Optimized small builds
+│
+├── frontend/                  # 🌐 User Interface
+│   └── chat-ui.html           # Professional Chat Web UI
+│
+├── docs/                      # 📚 Knowledge Base
+│   ├── CHALLENGE_QA.md        # Requirement Mapping
+│   ├── QUICK_START.md         # Starter tutorial
+│   ├── architecture/          # Design diagrams
+│   ├── mlops/                 # Pipeline lifecycle
+│   ├── runbooks/              # Ops manuals
+│   ├── technical/             # Deep technical specifications
+│   ├── user_guides/           # How-to manuals
+│   └── internal_summaries/    # Technical reference archive
+│
+├── data/                      # 💾 Persistence Layer
+│   ├── raw/                   # Input data
+│   ├── processed/             # Cleaned/Masked data
+│   └── vectorstore/           # ChromaDB index
+│
+└── models/                    # ⚙️ Model weights (ONNX)

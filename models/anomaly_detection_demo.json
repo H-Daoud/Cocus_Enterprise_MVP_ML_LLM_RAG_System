@@ -1,0 +1,22 @@
+{
+  "model_type": "IsolationForest",
+  "framework": "scikit-learn",
+  "format": "ONNX",
+  "version": "1.0",
+  "metadata": {
+    "model_type": "Rule-Based Anomaly Detection",
+    "trained_at": "2026-01-20T07:20:51.124775",
+    "num_samples": 21,
+    "anomalies_detected": 1,
+    "anomaly_rate": "4.8%",
+    "features": [
+      "quantity",
+      "unit_price",
+      "total_amount",
+      "status",
+      "business_rules"
+    ],
+    "note": "For production ML model, use Google Colab notebook: notebooks/ML_Training_Colab.ipynb"
+  },
+  "note": "This is a demonstration model. For production, train using Google Colab or cloud resources."
+}

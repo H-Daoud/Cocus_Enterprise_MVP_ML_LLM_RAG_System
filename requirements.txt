@@ -1,0 +1,69 @@
+# Core Dependencies
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+python-dotenv>=1.0.0
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+python-dateutil>=2.8.0
+
+# API Framework
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+python-multipart>=0.0.6
+
+# LLM & RAG - Support for both OpenAI and Gemini
+langchain>=0.1.0
+langchain-openai>=0.0.5  # For OpenAI
+langchain-google-genai>=1.0.0  # For Google Gemini
+openai>=1.0.0
+google-generativeai>=0.3.0  # Google Gemini SDK
+chromadb>=0.4.0
+sentence-transformers>=2.2.0
+tiktoken>=0.5.0
+
+# Vector Database (choose one or both)
+# chromadb>=0.4.0
+# pinecone-client>=2.2.0
+
+# HTTP & Networking
+httpx>=0.24.0
+requests>=2.31.0
+aiohttp>=3.8.0
+
+# Monitoring
+prometheus-fastapi-instrumentator>=6.1.0
+psutil>=5.9.0
+
+# Email Validation
+email-validator>=2.0.0
+
+# URL Validation
+validators>=0.20.0
+
+# Utilities
+tqdm>=4.65.0
+click>=8.1.0
+rich>=13.5.0
+
+# Logging
+loguru>=0.7.0
+
+# Configuration
+pyyaml>=6.0
+toml>=0.10.2
+
+# ML Training (Part 1 Requirement)
+scikit-learn>=1.3.0
+onnx>=1.15.0
+skl2onnx>=1.16.0
+joblib>=1.3.0
+
+# Pydantic-AI Agent (Part 2 Requirement)
+pydantic-ai>=0.0.13
+
+# RAG Dependencies
+langchain-chroma>=0.1.0
+langchain-huggingface>=0.0.1
+pypdf>=3.17.0

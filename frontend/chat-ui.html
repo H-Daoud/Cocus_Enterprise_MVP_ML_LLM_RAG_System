@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> LLM RAG Chat Interface</title>
+    <style>
+        :root {
+            --cocus-orange: #FF961E;
+            --cocus-navy: #2C2F3A;
+            --cocus-slate: #425B76;
+            --cocus-light: #F2F2F2;
+            --white: #FFFFFF;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--cocus-navy);
+            background-image: radial-gradient(circle at 50% 50%, #3a3f4e 0%, var(--cocus-navy) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--white);
+        }
+
+        .container {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.5);
+            max-width: 1000px;
+            width: 100%;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background: var(--cocus-navy);
+            color: var(--white);
+            padding: 30px;
+            text-align: left;
+            border-bottom: 2px solid var(--cocus-orange);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .header-content h1 span {
+            color: var(--cocus-orange);
+        }
+
+        .header p {
+            font-size: 13px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-bar {
+            background: var(--cocus-light);
+            padding: 10px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--cocus-navy);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00D18E;
+            box-shadow: 0 0 10px #00D18E;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(0, 209, 142, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(0, 209, 142, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(0, 209, 142, 0);
+            }
+        }
+
+        .status-dot.offline {
+            background: #FF4B55;
+            box-shadow: none;
+            animation: none;
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+            background: #FFFFFF;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+            max-width: 85%;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .message.user .message-avatar {
+            background: var(--cocus-orange);
+            color: var(--white);
+        }
+
+        .message.assistant .message-avatar {
+            background: var(--cocus-navy);
+            color: var(--white);
+        }
+
+        .message-content {
+            padding: 18px 24px;
+            border-radius: 20px;
+            line-height: 1.7;
+            font-size: 15px;
+            position: relative;
+        }
+
+        .message.user .message-content {
+            background: var(--cocus-orange);
+            color: var(--white);
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.assistant .message-content {
+            background: var(--cocus-light);
+            color: var(--cocus-navy);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-sources {
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(44, 47, 58, 0.1);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .source-tag {
+            display: inline-block;
+            background: rgba(44, 47, 58, 0.05);
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 5px;
+            margin-right: 5px;
+            color: var(--cocus-slate);
+        }
+
+        .input-container {
+            padding: 30px;
+            background: var(--white);
+            border-top: 1px solid #eee;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 15px;
+            position: relative;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 18px 28px;
+            border: 2px solid #eee;
+            border-radius: 35px;
+            font-size: 15px;
+            outline: none;
+            transition: var(--transition);
+            color: var(--cocus-navy);
+            background: var(--cocus-light);
+        }
+
+        #messageInput:focus {
+            border-color: var(--cocus-orange);
+            background: var(--white);
+            box-shadow: 0 10px 25px rgba(255, 150, 30, 0.1);
+        }
+
+        #sendButton {
+            padding: 0 35px;
+            background: var(--cocus-orange);
+            color: var(--white);
+            border: none;
+            border-radius: 35px;
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        #sendButton:hover:not(:disabled) {
+            background: #e68519;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 150, 30, 0.3);
+        }
+
+        #sendButton:disabled {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .welcome-message {
+            text-align: center;
+            max-width: 600px;
+            margin: 60px auto;
+        }
+
+        .welcome-message h2 {
+            font-size: 32px;
+            color: var(--cocus-navy);
+            margin-bottom: 15px;
+        }
+
+        .welcome-message h2 span {
+            color: var(--cocus-orange);
+        }
+
+        .welcome-message p {
+            font-size: 16px;
+            color: var(--cocus-slate);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .example-queries {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .example-query {
+            padding: 20px;
+            background: var(--cocus-light);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            font-size: 14px;
+            line-height: 1.4;
+            color: var(--cocus-navy);
+            font-weight: 500;
+        }
+
+        .example-query:hover {
+            border-color: var(--cocus-orange);
+            background: var(--white);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transform: translateY(-4px);
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 4px;
+            padding: 5px 0;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--cocus-navy);
+            border-radius: 50%;
+            animation: dotWave 1.2s infinite;
+            opacity: 0.3;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dotWave {
+
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: translateY(-5px);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>MVP-LLM-RAG <span>AI System</span></h1>
+                <p> Enterprise Intelligence </p>
+            </div>
+            <div style="text-align: right;">
+                <div class="status-indicator">
+                    <div class="status-dot" id="statusDot"></div>
+                    <span id="statusText">System Online</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div style="font-size: 12px; font-weight: 600;">
+                Copyright © H.Daoud
+            </div>
+            <div style="font-size: 12px; opacity: 0.8;">
+                <span id="modelInfo">ENGINE: LLAMA-3.2-3B</span>
+            </div>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="welcome-message">
+                <h2>Welcome to <span> AI Logistics Assistant</span></h2>
+                <p> How can I help your order operations today? </p>
+                <div class="example-queries">
+                    <div class="example-query"
+                        onclick="sendExample('Find order ORD-0003 and summarize the key transaction details.')">
+                        🔍 Summarize Order ORD-0003
+                    </div>
+                    <div class="example-query"
+                        onclick="sendExample('Analyze the dataset for any orders with quantity 0 or negative prices and explain the business impact.')">
+                        ⚠️ Identify Data Anomalies
+                    </div>
+                    <div class="example-query"
+                        onclick="sendExample('What patterns do you see in the use of coupon codes like NEWYEAR25 across different shipping cities?')">
+                        📊 Coupon Usage Patterns
+                    </div>
+                    <div class="example-query"
+                        onclick="sendExample('Show me orders shipped to London with a status of pair or pending.')">
+                        📍 London Order Status
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <div class="input-wrapper">
+                <input type="text" id="messageInput" placeholder="Ask about orders, customers, or patterns..."
+                    onkeypress="handleKeyPress(event)">
+                <button id="sendButton" onclick="sendMessage()">
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api/rag/query';
+        const HEALTH_URL = 'http://localhost:8000/api/health';
+
+        let isConnected = false;
+
+        // Check API health on load
+        async function checkHealth() {
+            try {
+                const response = await fetch(HEALTH_URL);
+                const data = await response.json();
+
+                if (data.status === 'healthy') {
+                    isConnected = true;
+                    document.getElementById('statusDot').classList.remove('offline');
+                    document.getElementById('statusText').textContent = 'System Online';
+                } else {
+                    throw new Error('API unhealthy');
+                }
+            } catch (error) {
+                isConnected = false;
+                document.getElementById('statusDot').classList.add('offline');
+                document.getElementById('statusText').textContent = 'System Offline';
+                showError('Target system unreachable. Please verify server status.');
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.style = "background: #fff3cd; border: 1px solid #ffc107; color: #856404; padding: 12px 20px; border-radius: 10px; margin: 10px 30px; font-size: 14px;";
+            errorDiv.textContent = message;
+            document.getElementById('chatContainer').insertBefore(
+                errorDiv,
+                document.getElementById('chatContainer').firstChild
+            );
+        }
+
+        function addMessage(text, isUser, sources = null) {
+            const chatContainer = document.getElementById('chatContainer');
+
+            // Remove welcome message if exists
+            const welcome = chatContainer.querySelector('.welcome-message');
+            if (welcome) welcome.remove();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'assistant'}`;
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = isUser ? '<span>👤</span>' : '<span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.47 2 2 6.47 2 12C2 17.53 6.47 22 12 22C17.53 22 22 17.53 22 12C22 6.47 17.53 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM12 13C10.9 13 10 12.1 10 11C10 9.9 10.9 9 12 9C13.1 9 14 9.9 14 11C14 12.1 13.1 13 12 13Z" fill="white"/></svg></span>';
+
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.textContent = text;
+
+            // Add sources if available
+            if (sources && sources.length > 0) {
+                const sourcesDiv = document.createElement('div');
+                sourcesDiv.className = 'message-sources';
+                sourcesDiv.innerHTML = '<div style="margin-bottom: 8px; font-weight: 700;">VERIFIED SOURCES</div>';
+
+                // Use a Set to avoid duplicate source IDs
+                const uniqueSources = Array.from(new Set(sources.map(s => s.document_id)));
+
+                uniqueSources.forEach((sourceId) => {
+                    const tag = document.createElement('span');
+                    tag.className = 'source-tag';
+                    tag.textContent = sourceId.split('/').pop();
+                    sourcesDiv.appendChild(tag);
+                });
+                content.appendChild(sourcesDiv);
+            }
+
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            chatContainer.appendChild(messageDiv);
+
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function showLoading() {
+            const chatContainer = document.getElementById('chatContainer');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message assistant';
+            loadingDiv.id = 'loadingMessage';
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = '🤖';
+
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.innerHTML = '<div class="loading-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+
+            loadingDiv.appendChild(avatar);
+            loadingDiv.appendChild(content);
+            chatContainer.appendChild(loadingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function hideLoading() {
+            const loading = document.getElementById('loadingMessage');
+            if (loading) loading.remove();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            if (!isConnected) {
+                showError('System offline. Please check connectivity.');
+                return;
+            }
+
+            // Add user message
+            addMessage(message, true);
+            input.value = '';
+
+            // Disable input while processing
+            const sendButton = document.getElementById('sendButton');
+            sendButton.disabled = true;
+            input.disabled = true;
+
+            // Show loading
+            showLoading();
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: message,
+                        include_sources: true,
+                        max_results: 3
+                    })
+                });
+
+                if (!response.ok) throw new Error('Query failed');
+                const data = await response.json();
+
+                hideLoading();
+                addMessage(data.answer, false, data.sources);
+
+            } catch (error) {
+                hideLoading();
+                addMessage('An enterprise connection error occurred. Please retry your request.', false);
+                console.error('Error:', error);
+            } finally {
+                sendButton.disabled = false;
+                input.disabled = false;
+                input.focus();
+            }
+        }
+
+        function sendExample(query) {
+            document.getElementById('messageInput').value = query;
+            sendMessage();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Check health on load
+        checkHealth();
+
+        // Check health every 30 seconds
+        setInterval(checkHealth, 30000);
+    </script>
+</body>
+
+</html>

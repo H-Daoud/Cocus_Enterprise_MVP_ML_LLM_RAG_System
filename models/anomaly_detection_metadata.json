@@ -1,0 +1,18 @@
+{
+  "model_type": "IsolationForest",
+  "feature_names": [
+    "quantity",
+    "unit_price",
+    "total_amount",
+    "has_coupon",
+    "has_tags",
+    "is_gift_flag",
+    "status_encoded"
+  ],
+  "trained_at": "2026-01-20T07:35:41.636208",
+  "num_features": 7,
+  "num_samples": 21,
+  "contamination": 0.1,
+  "anomalies_detected": 2,
+  "anomaly_rate": "9.5%"
+}

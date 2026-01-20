@@ -1,0 +1,55 @@
+name: Automated ML Model Training
+
+on:
+  # Trigger when new data is pushed
+  push:
+    paths:
+      - 'data/raw/**/*.ndjson'
+    branches:
+      - main
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install scikit-learn onnx skl2onnx joblib
+      
+      - name: Run ML training
+        run: |
+          python3 scripts/train_ml_model.py
+      
+      - name: Upload model artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ml-model
+          path: |
+            models/anomaly_detection.onnx
+            models/anomaly_detection.pkl
+            models/anomaly_detection_metadata.json
+      
+      - name: Create Release with Model
+        if: github.event_name == 'push'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: model-${{ github.sha }}
+          name: ML Model - ${{ github.sha }}
+          files: |
+            models/anomaly_detection.onnx
+            models/anomaly_detection_metadata.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
