@@ -104,27 +104,34 @@ if prompt := st.chat_input("What would you like to know about the orders?"):
                 # 1. Retrieve Context
                 context = st.session_state.rag_manager.query(prompt)
                 
-                # 2. Setup LLM and Query
-                config = LLMConfig.from_env()
-                agent = config.get_agent()
+                # 2. Setup LLM using LangChain (more reliable for Streamlit Cloud)
+                from src.utils.llm_config import get_llm_client
+                from langchain.schema import HumanMessage, SystemMessage
+                
+                llm = get_llm_client()
                 
                 # Format context for prompt
                 context_str = "\n---\n".join([c["content"] for c in context])
-                full_prompt = f"Use the following order context to answer the user question. Context:\n{context_str}\n\nQuestion: {prompt}"
+                
+                # Create messages
+                messages = [
+                    SystemMessage(content="You are a professional COCUS RAG Agent. Use the provided context to answer questions about orders. Be concise and cite order IDs when relevant."),
+                    HumanMessage(content=f"Context:\n{context_str}\n\nQuestion: {prompt}\n\nProvide a clear answer and list any Order IDs you reference.")
+                ]
                 
                 # Get response
-                response = agent.run_sync(full_prompt)
-                answer = response.data.answer
-                citations = response.data.used_order_ids
+                response = llm.invoke(messages)
+                answer = response.content
                 
                 # Display Answer
                 st.write(answer)
                 
-                # Display Citations
-                if citations:
-                    with st.expander("📚 Source Citations"):
-                        for cid in citations:
-                            st.code(f"Order: {cid}")
+                # Display Context Sources
+                if context:
+                    with st.expander("📚 Retrieved Context"):
+                        for i, ctx in enumerate(context[:3], 1):
+                            st.markdown(f"**Source {i}** (Score: {ctx.get('score', 0):.2f})")
+                            st.code(ctx["content"][:200] + "...")
                 
             except Exception as e:
                 answer = f"I'm sorry, I encountered an error: {str(e)}"
