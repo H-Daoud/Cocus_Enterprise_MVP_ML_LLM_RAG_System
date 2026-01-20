@@ -3,7 +3,7 @@
 - **Subtitle**: Automated Data Validation, ML Anomaly Detection & RAG-AI Agent
 - **Date**: January 2026
 - **Author**: H. Daoud © 2026
-- **Repository**: [View on GitHub](https://github.com/H-Daoud?tab=repositories)
+- **Repository**: [View on GitHub](https://github.com/H-Daoud/Cocus_Enterprise_MVP_ML_LLM_RAG_System)
 - **Footer**: High-Performance, Compliance-First AI Architecture
 
 ---
@@ -109,7 +109,7 @@
 ## Slide 13: Closing Statement
 - **Vision**: "Turning complex data into actionable, compliant, and automated AI intelligence."
 - **Signature**: H. Daoud © 2026
-- **Repository**: https://github.com/H-Daoud?tab=repositories
+- **Repository**: https://github.com/H-Daoud/Cocus_Enterprise_MVP_ML_LLM_RAG_System
 - **Next Steps**: Ready for production-scale deployment.
 
 ---
