@@ -1,10 +1,15 @@
 import streamlit as st
 import os
 import json
-from dotenv import load_dotenv
 from src.rag.manager import RAGManager
 from src.utils.llm_config import LLMConfig
 import pandas as pd
+
+# Load secrets from Streamlit for Cloud deployment
+if hasattr(st, "secrets"):
+    for key, value in st.secrets.items():
+        if isinstance(value, str):
+            os.environ[key] = value
 
 # Page config
 st.set_page_config(
