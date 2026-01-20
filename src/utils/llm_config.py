@@ -82,26 +82,24 @@ class LLMConfig(BaseModel):
         from pydantic_ai.models.openai import OpenAIModel
         from typing import List
         from pydantic import BaseModel as PydanticBaseModel
+        import os
 
         class OrderResponse(PydanticBaseModel):
             answer: str
             used_order_ids: List[str]
 
         if self.provider == LLMProvider.OPENAI:
-            # For HuggingFace router, we need to configure the http_client with custom base_url
+            # pydantic-ai expects API key in environment variable
+            if self.api_key:
+                os.environ['OPENAI_API_KEY'] = self.api_key
+            
+            # For HuggingFace router, configure custom base_url via http_client
             if self.base_url:
                 import httpx
                 http_client = httpx.Client(base_url=self.base_url)
-                model = OpenAIModel(
-                    self.model,
-                    api_key=self.api_key,
-                    http_client=http_client,
-                )
+                model = OpenAIModel(self.model, http_client=http_client)
             else:
-                model = OpenAIModel(
-                    self.model,
-                    api_key=self.api_key,
-                )
+                model = OpenAIModel(self.model)
             
             return Agent(
                 model=model,
@@ -109,13 +107,18 @@ class LLMConfig(BaseModel):
                 system_prompt="You are a professional COCUS RAG Agent. Use the provided context to answer. List any Order IDs referenced."
             )
         elif self.provider == LLMProvider.GEMINI:
-            # Fallback for Gemini if needed, or use GeminiModel if available in installed version
+            # Set API key for Gemini
+            if self.api_key:
+                os.environ['GEMINI_API_KEY'] = self.api_key
+            
             try:
                 from pydantic_ai.models.gemini import GeminiModel
-                model = GeminiModel(self.model, api_key=self.api_key)
+                model = GeminiModel(self.model)
             except:
                 # Fallback to OpenAI-compatible model
-                model = OpenAIModel(self.model, api_key=self.api_key)
+                if self.api_key:
+                    os.environ['OPENAI_API_KEY'] = self.api_key
+                model = OpenAIModel(self.model)
             
             return Agent(
                 model=model,
