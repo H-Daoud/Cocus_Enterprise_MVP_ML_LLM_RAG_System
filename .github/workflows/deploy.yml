@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - uses: actions/checkout@v4
+
       - name: Check for GCP Secrets
         run: |
           if [ -z "${{ secrets.GCP_SA_KEY }}" ]; then
