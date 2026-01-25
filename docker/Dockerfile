@@ -22,7 +22,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 
 # Install Python dependencies to a specific directory
-RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt && \
+    rm -rf /root/.cache/pip
 
 # ============================================================================
 # STAGE 2: Runtime - Minimal production image

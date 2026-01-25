@@ -3,8 +3,8 @@ FROM python:3.10-slim as builder
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
     && rm -rf /var/lib/apt/lists/*
@@ -23,7 +23,8 @@ COPY --from=builder /app/wheels /wheels
 COPY --from=builder /app/requirements.txt .
 
 # Install dependencies
-RUN pip install --no-cache /wheels/*
+RUN pip install --no-cache /wheels/* && \
+    rm -rf /wheels /app/requirements.txt
 
 # Copy application code
 COPY src/ ./src/
