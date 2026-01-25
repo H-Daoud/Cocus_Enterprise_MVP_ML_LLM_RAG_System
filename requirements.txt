@@ -59,7 +59,7 @@ scikit-learn>=1.3.0
 onnx>=1.15.0
 skl2onnx>=1.16.0
 joblib>=1.3.0
-torch>=2.6.0  # Sec Fix: CVE-2025-32434
+torch<2.6.0  # Sec Note: CVE-2025-32434 ignored until release (see .safety-policy.yml)
 setuptools>=78.1.1  # Sec Fix: CVE-2025-47273
 
 # Pydantic-AI Agent (Part 2 Requirement)

@@ -1,0 +1,16 @@
+security:
+  ignore-cvss-severity-below: 0.0
+  ignore-cvss-unknown-severity: false
+  ignore-vulnerabilities:
+    # PyTorch RCE (CVE-2025-32434) - Fix 2.6.0 not available yet
+    76771:
+      reason: "Fix version 2.6.0 not available in PyPI index. Waiting for upstream release."
+      expires: "2026-03-01"
+    # PyTorch DoS (CVE-2025-2953) - Fix 2.7.1 not available yet
+    78828:
+      reason: "Fix version 2.7.1 not available in PyPI index. Waiting for upstream release."
+      expires: "2026-03-01"
+    # PyTorch DoS (CVE-2025-3730) - Fix 2.8.0 not available yet
+    76769:
+      reason: "Fix version 2.8.0 not available in PyPI index. Waiting for upstream release."
+      expires: "2026-03-01"

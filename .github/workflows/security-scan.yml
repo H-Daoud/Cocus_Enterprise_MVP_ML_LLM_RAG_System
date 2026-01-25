@@ -24,7 +24,7 @@ jobs:
       - name: Safety check
         run: |
           pip install safety
-          safety check --json
+          safety check --policy-file .safety-policy.yml --json
 
   code-scan:
     runs-on: ubuntu-latest
