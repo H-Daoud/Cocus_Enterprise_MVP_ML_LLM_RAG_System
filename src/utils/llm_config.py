@@ -51,7 +51,9 @@ class LLMConfig(BaseModel):
                 try:
                     from src.utils.secrets_manager import get_secrets_manager
                     api_key = get_secrets_manager().get_openai_key()
-                except:
+                except Exception as e:
+                    from src.utils.logger import logger
+                    logger.warning(f"Failed to retrieve OpenAI key from Secrets Manager: {e}")
                     pass
             model = os.getenv("OPENAI_MODEL", "meta-llama/Llama-3.2-3B-Instruct")
         elif provider == LLMProvider.GEMINI:
@@ -60,7 +62,9 @@ class LLMConfig(BaseModel):
                 try:
                     from src.utils.secrets_manager import get_secrets_manager
                     api_key = get_secrets_manager().get_gemini_key()
-                except:
+                except Exception as e:
+                    from src.utils.logger import logger
+                    logger.warning(f"Failed to retrieve Gemini key from Secrets Manager: {e}")
                     pass
             model = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
         else:  # MOCK
