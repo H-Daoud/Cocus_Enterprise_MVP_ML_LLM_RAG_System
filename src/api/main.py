@@ -3,16 +3,17 @@ FastAPI main application
 Enterprise-grade API with security, monitoring, and compliance
 """
 
+import time
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 from prometheus_fastapi_instrumentator import Instrumentator
-import time
-from contextlib import asynccontextmanager
 
-from src.api.routes import health, validation, rag
 from src.api.middleware.error_handler import error_handler_middleware
+from src.api.routes import health, rag, validation
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)

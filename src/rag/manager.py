@@ -1,13 +1,15 @@
 import os
 import shutil
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
+
 from dotenv import load_dotenv
-from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader, TextLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
-from src.utils.logger import get_logger
+from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader, TextLoader
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
 from src.utils.llm_config import LLMConfig
+from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -42,6 +44,7 @@ class RAGManager:
     def load_ndjson(self, file_path: str) -> List:
         """Parse orders from an NDJSON file and return as LangChain Documents"""
         import json
+
         from langchain_core.documents import Document
 
         logger.debug(f"Parsing orders from {file_path}...")

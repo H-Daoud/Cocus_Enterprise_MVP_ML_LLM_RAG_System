@@ -8,6 +8,7 @@ import os
 import sys
 from pathlib import Path
 from typing import List
+
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent, RunContext
 
@@ -15,7 +16,6 @@ from pydantic_ai import Agent, RunContext
 sys.path.append(str(Path(__file__).parent.parent))
 
 from src.rag.manager import RAGManager
-
 
 # ============================================================================
 # Output Schema (Part 2 Requirement)

@@ -1,9 +1,11 @@
-import streamlit as st
-import os
 import json
+import os
+
+import pandas as pd
+import streamlit as st
+
 from src.rag.manager import RAGManager
 from src.utils.llm_config import LLMConfig
-import pandas as pd
 
 # Load secrets from Streamlit for Cloud deployment
 if hasattr(st, "secrets"):
@@ -108,8 +110,9 @@ if prompt := st.chat_input("What would you like to know about the orders?"):
                 context = st.session_state.rag_manager.query(prompt)
 
                 # 2. Setup LLM using LangChain (more reliable for Streamlit Cloud)
-                from src.utils.llm_config import get_llm_client
                 from langchain_core.messages import HumanMessage, SystemMessage
+
+                from src.utils.llm_config import get_llm_client
 
                 llm = get_llm_client()
 

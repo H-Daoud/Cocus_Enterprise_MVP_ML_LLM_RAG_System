@@ -4,6 +4,7 @@ Unit tests for Order model
 
 import pytest
 from pydantic import ValidationError
+
 from src.models.order import Order, OrderStatus
 
 

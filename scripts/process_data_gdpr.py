@@ -12,9 +12,10 @@ from typing import List, Tuple
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent))
 
+from pydantic import ValidationError
+
 from src.models.order import Order
 from src.privacy.gdpr_masking import GDPRDataMasker
-from pydantic import ValidationError
 
 
 def load_and_validate_orders(file_path: str) -> Tuple[List[Order], List[dict]]:

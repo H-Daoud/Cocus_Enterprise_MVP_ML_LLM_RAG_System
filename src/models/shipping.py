@@ -2,8 +2,9 @@
 Shipping information model
 """
 
+from typing import ClassVar, Optional
+
 from pydantic import BaseModel, Field, field_validator
-from typing import Optional, ClassVar
 
 
 class Shipping(BaseModel):

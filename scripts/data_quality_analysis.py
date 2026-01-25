@@ -6,15 +6,16 @@ Analyzes orders_sample.ndjson and answers all 5 required questions
 
 import json
 import sys
-from pathlib import Path
 from collections import Counter, defaultdict
-from typing import Dict, List, Any
+from pathlib import Path
+from typing import Any, Dict, List
 
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from src.models.order import Order
 from pydantic import ValidationError
+
+from src.models.order import Order
 
 
 def load_and_validate_orders(file_path: str) -> tuple[List[Order], List[Dict], List[str]]:

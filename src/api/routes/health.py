@@ -2,11 +2,12 @@
 Health check endpoints
 """
 
+import platform
+from datetime import datetime
+
+import psutil
 from fastapi import APIRouter, status
 from pydantic import BaseModel
-from datetime import datetime
-import psutil
-import platform
 
 router = APIRouter()
 

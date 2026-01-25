@@ -6,25 +6,27 @@ Requires: pip install scikit-learn onnx skl2onnx joblib
 
 import json
 import sys
-import numpy as np
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 from typing import List
+
+import numpy as np
 
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from src.models.order import Order
 from pydantic import ValidationError
+
+from src.models.order import Order
 
 # Import ML libraries
 try:
-    from sklearn.ensemble import IsolationForest
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.pipeline import Pipeline
     import joblib
     from skl2onnx import convert_sklearn
     from skl2onnx.common.data_types import FloatTensorType
+    from sklearn.ensemble import IsolationForest
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import StandardScaler
 except ImportError as e:
     print(f"❌ Missing ML libraries. Please run:")
     print(f"   pip install scikit-learn onnx skl2onnx joblib")

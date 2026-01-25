@@ -6,6 +6,7 @@ Supports OpenAI and Google Gemini
 import os
 from enum import Enum
 from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -88,11 +89,12 @@ class LLMConfig(BaseModel):
 
     def get_agent(self):
         """Get a Pydantic AI agent based on configuration"""
+        import os
+        from typing import List
+
+        from pydantic import BaseModel as PydanticBaseModel
         from pydantic_ai import Agent
         from pydantic_ai.models.openai import OpenAIModel
-        from typing import List
-        from pydantic import BaseModel as PydanticBaseModel
-        import os
 
         class OrderResponse(PydanticBaseModel):
             answer: str

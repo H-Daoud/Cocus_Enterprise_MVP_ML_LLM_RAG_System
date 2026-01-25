@@ -2,10 +2,11 @@
 Error handler middleware
 """
 
+import traceback
+
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
-import traceback
 
 from src.utils.logger import get_logger
 

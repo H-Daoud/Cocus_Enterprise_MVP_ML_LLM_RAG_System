@@ -2,9 +2,10 @@
 RAG (Retrieval-Augmented Generation) API endpoints
 """
 
+from typing import List, Optional
+
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
-from typing import List, Optional
 
 from src.utils.logger import get_logger
 
@@ -51,8 +52,8 @@ async def query_rag(request: QueryRequest):
 
     try:
         # Import here to avoid loading if not needed
-        from src.utils.llm_config import get_llm_client, LLMConfig
         from src.rag.manager import RAGManager
+        from src.utils.llm_config import LLMConfig, get_llm_client
 
         # Get LLM client (auto-detects provider from env)
         config = LLMConfig.from_env()

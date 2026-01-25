@@ -2,10 +2,11 @@
 Data validation API endpoints
 """
 
-from fastapi import APIRouter, UploadFile, File, HTTPException, status
-from typing import List
-from pydantic import BaseModel, ValidationError
 import json
+from typing import List
+
+from fastapi import APIRouter, File, HTTPException, UploadFile, status
+from pydantic import BaseModel, ValidationError
 
 from src.models.order import Order
 from src.utils.logger import get_logger

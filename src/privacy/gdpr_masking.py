@@ -5,7 +5,8 @@ Anonymizes sensitive personal data before ML training and RAG indexing
 
 import hashlib
 import re
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
 from pydantic import BaseModel
 
 

@@ -4,9 +4,9 @@ AUTOMATED PRESENTATION DEMO (No User Input Required)
 Demonstrates all MVP requirements automatically
 """
 
+import asyncio
 import os
 import sys
-import asyncio
 from pathlib import Path
 
 # Add src to path

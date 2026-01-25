@@ -6,15 +6,16 @@ Perfect for presentations - demonstrates the concept without sklearn/onnx instal
 
 import json
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 from typing import List
 
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from src.models.order import Order
 from pydantic import ValidationError
+
+from src.models.order import Order
 
 
 def load_validated_orders(file_path: str) -> List[Order]:
