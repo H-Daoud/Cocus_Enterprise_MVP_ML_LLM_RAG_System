@@ -3,9 +3,6 @@ import shutil
 from typing import Dict, List, Optional
 
 from dotenv import load_dotenv
-from langchain_chroma import Chroma
-from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader, TextLoader
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from src.utils.llm_config import LLMConfig
@@ -31,10 +28,20 @@ class RAGManager:
         load_dotenv()
 
         self.persist_directory = persist_directory
-        self.embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2",
-            model_kwargs={"device": "cpu"},  # Force CPU for Streamlit Cloud compatibility
-        )
+        
+        # Try FastEmbed first (lighter, no PyTorch)
+        try:
+            from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
+            self.embeddings = FastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")
+            logger.info("Using FastEmbed (ONNX) for lightweight embeddings.")
+        except (ImportError, ModuleNotFoundError) as e:
+            logger.warning(f"FastEmbed not available ({e}). Falling back to HuggingFaceEmbeddings...")
+            from langchain_huggingface import HuggingFaceEmbeddings
+            self.embeddings = HuggingFaceEmbeddings(
+                model_name="sentence-transformers/all-MiniLM-L6-v2",
+                model_kwargs={"device": "cpu"},
+            )
+        
         self.vector_store = None
         self._initialized = True
 
@@ -139,6 +146,7 @@ class RAGManager:
             os.makedirs(self.persist_directory)
 
         # Create and persist vector store
+        from langchain_chroma import Chroma
         self.vector_store = Chroma.from_documents(
             documents=all_documents,
             embedding=self.embeddings,
@@ -151,6 +159,7 @@ class RAGManager:
         if self.vector_store is None:
             if os.path.exists(self.persist_directory) and os.listdir(self.persist_directory):
                 logger.info("Loading existing vector store...")
+                from langchain_chroma import Chroma
                 self.vector_store = Chroma(
                     persist_directory=self.persist_directory, embedding_function=self.embeddings
                 )
