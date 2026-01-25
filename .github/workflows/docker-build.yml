@@ -19,7 +19,8 @@ jobs:
     
     strategy:
       matrix:
-        service: [api, ml, rag, frontend]
+        service: [api, frontend]
+        fail-fast: false
     
     steps:
       - uses: actions/checkout@v4
