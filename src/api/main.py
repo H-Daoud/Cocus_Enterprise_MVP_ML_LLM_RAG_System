@@ -36,7 +36,7 @@ app = FastAPI(
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
 # CORS middleware
@@ -51,6 +51,7 @@ app.add_middleware(
 # GZip compression
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
+
 # Request timing middleware
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
@@ -59,6 +60,7 @@ async def add_process_time_header(request: Request, call_next):
     process_time = time.time() - start_time
     response.headers["X-Process-Time"] = str(process_time)
     return response
+
 
 # Error handler middleware
 app.middleware("http")(error_handler_middleware)
@@ -71,6 +73,7 @@ app.include_router(health.router, prefix="/api", tags=["Health"])
 app.include_router(validation.router, prefix="/api/validation", tags=["Validation"])
 app.include_router(rag.router, prefix="/api/rag", tags=["RAG"])
 
+
 # Root endpoint
 @app.get("/")
 async def root():
@@ -79,10 +82,11 @@ async def root():
         "name": "COCUS MVP ML/LLM RAG System",
         "version": "1.0.0",
         "status": "operational",
-        "docs": "/api/docs"
+        "docs": "/api/docs",
     }
 
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

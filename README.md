@@ -2,6 +2,7 @@
 
 **Production-ready ML + RAG system with GDPR compliance**
 
+[![CI - Continuous Integration](https://github.com/H-Daoud/Cocus_Enterprise_MVP_ML_LLM_RAG_System/actions/workflows/ci.yml/badge.svg)](https://github.com/H-Daoud/Cocus_Enterprise_MVP_ML_LLM_RAG_System/actions/workflows/ci.yml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Docker](https://img.shields.io/badge/docker-ready-brightgreen.svg)](https://www.docker.com/)
 [![GCP](https://img.shields.io/badge/GCP-ready-4285F4.svg)](https://cloud.google.com/)

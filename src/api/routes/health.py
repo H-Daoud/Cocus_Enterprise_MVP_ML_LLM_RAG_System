@@ -13,6 +13,7 @@ router = APIRouter()
 
 class HealthResponse(BaseModel):
     """Health check response model"""
+
     status: str
     timestamp: datetime
     version: str
@@ -33,8 +34,8 @@ async def health_check():
             "cpu_percent": psutil.cpu_percent(),
             "memory_percent": psutil.virtual_memory().percent,
             "platform": platform.system(),
-            "python_version": platform.python_version()
-        }
+            "python_version": platform.python_version(),
+        },
     )
 
 

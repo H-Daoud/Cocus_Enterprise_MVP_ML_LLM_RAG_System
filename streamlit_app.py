@@ -20,7 +20,8 @@ st.set_page_config(
 )
 
 # Custom CSS for Premium Look
-st.markdown("""
+st.markdown(
+    """
 <style>
     .main {
         background-color: #f8f9fa;
@@ -52,7 +53,9 @@ st.markdown("""
         border-radius: 5px;
     }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # Initialize Session State
 if "messages" not in st.session_state:
@@ -72,7 +75,7 @@ with st.sidebar:
     st.image("https://www.cocus.com/wp-content/themes/cocus/img/logo.svg", width=150)
     st.title("Settings")
     st.info("Ask questions about enterprise orders, coupons, and suspicious activities.")
-    
+
     if st.button("Clear Chat"):
         st.session_state.messages = []
         st.rerun()
@@ -103,36 +106,40 @@ if prompt := st.chat_input("What would you like to know about the orders?"):
             try:
                 # 1. Retrieve Context
                 context = st.session_state.rag_manager.query(prompt)
-                
+
                 # 2. Setup LLM using LangChain (more reliable for Streamlit Cloud)
                 from src.utils.llm_config import get_llm_client
                 from langchain_core.messages import HumanMessage, SystemMessage
-                
+
                 llm = get_llm_client()
-                
+
                 # Format context for prompt
                 context_str = "\n---\n".join([c["content"] for c in context])
-                
+
                 # Create messages
                 messages = [
-                    SystemMessage(content="You are a professional COCUS RAG Agent. Use the provided context to answer questions about orders. Be concise and cite order IDs when relevant."),
-                    HumanMessage(content=f"Context:\n{context_str}\n\nQuestion: {prompt}\n\nProvide a clear answer and list any Order IDs you reference.")
+                    SystemMessage(
+                        content="You are a professional COCUS RAG Agent. Use the provided context to answer questions about orders. Be concise and cite order IDs when relevant."
+                    ),
+                    HumanMessage(
+                        content=f"Context:\n{context_str}\n\nQuestion: {prompt}\n\nProvide a clear answer and list any Order IDs you reference."
+                    ),
                 ]
-                
+
                 # Get response
                 response = llm.invoke(messages)
                 answer = response.content
-                
+
                 # Display Answer
                 st.write(answer)
-                
+
                 # Display Context Sources
                 if context:
                     with st.expander("📚 Retrieved Context"):
                         for i, ctx in enumerate(context[:3], 1):
                             st.markdown(f"**Source {i}** (Score: {ctx.get('score', 0):.2f})")
                             st.code(ctx["content"][:200] + "...")
-                
+
             except Exception as e:
                 answer = f"I'm sorry, I encountered an error: {str(e)}"
                 st.error(answer)

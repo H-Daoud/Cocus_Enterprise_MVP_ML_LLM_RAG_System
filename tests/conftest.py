@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 # Add src to Python path
-sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 
 @pytest.fixture
@@ -21,15 +21,11 @@ def sample_order_data():
         "is_gift": False,
         "status": "pending",
         "created_at": "2025-01-10T09:15:00Z",
-        "shipping": {
-            "country_code": "US",
-            "city": "New York",
-            "postal_code": "10001"
-        },
+        "shipping": {"country_code": "US", "city": "New York", "postal_code": "10001"},
         "tags": ["test"],
         "referrer_url": "https://example.com",
         "coupon_code": "TEST10",
-        "priority": 3
+        "priority": 3,
     }
 
 
@@ -44,10 +40,6 @@ def invalid_order_data():
         "is_gift": "maybe",
         "status": "unknown",
         "created_at": "invalid-date",
-        "shipping": {
-            "country_code": "XX",
-            "city": "",
-            "postal_code": None
-        },
-        "priority": 10
+        "shipping": {"country_code": "XX", "city": "", "postal_code": None},
+        "priority": 10,
     }

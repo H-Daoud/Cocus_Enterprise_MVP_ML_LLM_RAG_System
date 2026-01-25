@@ -25,12 +25,8 @@ def test_invalid_email():
         "unit_price": 10.0,
         "status": "pending",
         "created_at": "2025-01-10T09:15:00Z",
-        "shipping": {
-            "country_code": "US",
-            "city": "Test",
-            "postal_code": "12345"
-        },
-        "priority": 1
+        "shipping": {"country_code": "US", "city": "Test", "postal_code": "12345"},
+        "priority": 1,
     }
     with pytest.raises(ValidationError):
         Order(**data)
@@ -45,12 +41,8 @@ def test_negative_quantity():
         "unit_price": 10.0,
         "status": "pending",
         "created_at": "2025-01-10T09:15:00Z",
-        "shipping": {
-            "country_code": "US",
-            "city": "Test",
-            "postal_code": "12345"
-        },
-        "priority": 1
+        "shipping": {"country_code": "US", "city": "Test", "postal_code": "12345"},
+        "priority": 1,
     }
     with pytest.raises(ValidationError):
         Order(**data)
@@ -66,12 +58,8 @@ def test_boolean_normalization():
         "is_gift": "yes",  # String that should be normalized to True
         "status": "pending",
         "created_at": "2025-01-10T09:15:00Z",
-        "shipping": {
-            "country_code": "US",
-            "city": "Test",
-            "postal_code": "12345"
-        },
-        "priority": 1
+        "shipping": {"country_code": "US", "city": "Test", "postal_code": "12345"},
+        "priority": 1,
     }
     order = Order(**data)
     assert order.is_gift is True
@@ -86,12 +74,8 @@ def test_priority_normalization():
         "unit_price": 10.0,
         "status": "pending",
         "created_at": "2025-01-10T09:15:00Z",
-        "shipping": {
-            "country_code": "US",
-            "city": "Test",
-            "postal_code": "12345"
-        },
-        "priority": "high"  # Should be normalized to 1
+        "shipping": {"country_code": "US", "city": "Test", "postal_code": "12345"},
+        "priority": "high",  # Should be normalized to 1
     }
     order = Order(**data)
     assert order.priority == 1
