@@ -18,9 +18,9 @@ jobs:
       packages: write
     
     strategy:
+      fail-fast: false
       matrix:
         service: [api, frontend]
-        fail-fast: false
     
     steps:
       - uses: actions/checkout@v4
